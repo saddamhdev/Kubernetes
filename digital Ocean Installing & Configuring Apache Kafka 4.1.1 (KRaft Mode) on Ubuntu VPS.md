@@ -76,26 +76,32 @@ sudo nano /opt/kafka/config/server.properties
 Replace all content with:
 
 ```properties
-##########################
-# Kafka 4.1.1 - KRaft Mode
-##########################
-
-process.roles=broker,controller
-node.id=1
-
+controller.quorum.bootstrap.servers=localhost:9093
 listeners=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+inter.broker.listener.name=PLAINTEXT
 advertised.listeners=PLAINTEXT://159.89.172.251:9092
-
 controller.listener.names=CONTROLLER
-controller.quorum.voters=1@localhost:9093
-
-log.dirs=/opt/kafka/logs
-
+listener.security.protocol.map=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
 num.network.threads=3
 num.io.threads=8
-auto.create.topics.enable=true
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/tmp/kraft-combined-logs
 num.partitions=1
-default.replication.factor=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+share.coordinator.state.topic.replication.factor=1
+share.coordinator.state.topic.min.isr=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.flush.interval.messages=10000
+log.flush.interval.ms=1000
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+controller.quorum.voters=1@localhost:9093
+
 ```
 
 ---
